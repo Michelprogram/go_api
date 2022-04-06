@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"internal/entities"
 	"internal/web/rest"
 
 	"github.com/gorilla/mux"
@@ -16,10 +15,7 @@ func main() {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/hello", helloHandler)
-	r.HandleFunc("/language", testLanguage)
-
-	// --- Language Handlers
+	// Language Handlers
 
 	r.HandleFunc("/apiV1/languages/{code}", rest.LanguageByCode).Methods("GET")
 	r.HandleFunc("/apiV1/languages", rest.AllLanguages).Methods("GET")
@@ -28,21 +24,16 @@ func main() {
 	r.HandleFunc("/apiV1/languages/{code}", rest.DeleteLanguage).Methods("DELETE")
 	r.HandleFunc("/apiV1/languages", rest.PutLanguage).Methods("PUT")
 
+	// Student Handlers
+
+	r.HandleFunc("/apiV1/students/{id}", rest.StudentById).Methods("GET")
+	r.HandleFunc("/apiV1/students", rest.AllStudents).Methods("GET")
+
+	r.HandleFunc("/apiV1/students", rest.CreateStudent).Methods("POST")
+	r.HandleFunc("/apiV1/students/{id}", rest.DeleteStudent).Methods("DELETE")
+	r.HandleFunc("/apiV1/students", rest.PutStudent).Methods("PUT")
+
 	http.ListenAndServe(":8080", r)
 
 	fmt.Println("Fermeture de l'api ...")
-}
-
-func helloHandler(w http.ResponseWriter, r *http.Request) {
-
-	fmt.Fprintf(w, "Bonjour depuis l'api")
-}
-
-func testLanguage(w http.ResponseWriter, r *http.Request) {
-
-	var language entities.Language = entities.NewLanguage("21", "Golang")
-
-	fmt.Printf("Coucou from testLanguage : %s", language.String())
-
-	fmt.Fprintf(w, "Test : %s", language.String())
 }

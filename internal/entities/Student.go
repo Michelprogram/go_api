@@ -10,6 +10,9 @@ type Student struct {
 	LanguageDeCode string
 }
 
+//Check if Student implement de stringer
+var _ fmt.Stringer = (*Student)(nil)
+
 func NewStudent(id int, FirstName string, LastName string, Age int, LanguageDeCode string) Student {
 	return Student{id, FirstName, LastName, Age, LanguageDeCode}
 }
