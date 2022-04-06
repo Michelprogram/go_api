@@ -9,6 +9,8 @@ import (
 
 	"strconv"
 
+	ps "internal/persistence"
+
 	"github.com/gorilla/mux"
 )
 
@@ -25,13 +27,14 @@ func StudentById(w http.ResponseWriter, r *http.Request) {
 
 	id, _ := strconv.Atoi(vars["id"])
 
-	for _, element := range students {
-		if element.Id == id {
-			res, _ := json.Marshal(element)
+	dao := ps.NewStudentDaoMemory()
 
-			fmt.Fprintf(w, "%s", res)
-			return
-		}
+	student, err := dao.Find(id)
+
+	if err == nil {
+		res, _ := json.Marshal(*student)
+		fmt.Fprintf(w, "%s", res)
+		return
 	}
 
 	fmt.Fprintf(w, "L'étudiant avec l'id %d n'éxiste pas.", id)
@@ -39,7 +42,9 @@ func StudentById(w http.ResponseWriter, r *http.Request) {
 
 func AllStudents(w http.ResponseWriter, r *http.Request) {
 
-	res, _ := json.Marshal(students)
+	var dao ps.StudentDaoMemory = ps.NewStudentDaoMemory()
+
+	res, _ := json.Marshal(dao.FindAll())
 
 	fmt.Fprintf(w, "%s", res)
 }
