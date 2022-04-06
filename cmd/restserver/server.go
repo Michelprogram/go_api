@@ -19,10 +19,13 @@ func main() {
 	r.HandleFunc("/hello", helloHandler)
 	r.HandleFunc("/language", testLanguage)
 
-	r.HandleFunc("/apiV1/languages/{code}", rest.LanguageByCode)
+	// --- Language Handlers
+
+	r.HandleFunc("/apiV1/languages/{code}", rest.LanguageByCode).Methods("GET")
 	r.HandleFunc("/apiV1/languages", rest.AllLanguages).Methods("GET")
 
 	r.HandleFunc("/apiV1/languages", rest.CreateLanguage).Methods("POST")
+	r.HandleFunc("/apiV1/languages/{code}", rest.DeleteLanguage).Methods("DELETE")
 
 	http.ListenAndServe(":8080", r)
 

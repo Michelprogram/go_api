@@ -42,3 +42,22 @@ func CreateLanguage(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprintf(w, "Done")
 }
+
+func DeleteLanguage(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+
+	for index, element := range languages {
+		if element.Code == vars["code"] {
+
+			res, _ := json.Marshal(element)
+
+			languages = append(languages[:index], languages[index+1:]...)
+
+			fmt.Fprintf(w, "%s", res)
+			return
+		}
+	}
+
+	fmt.Fprintf(w, "Le code %s n'a pas été trouvé.", vars["code"])
+}
