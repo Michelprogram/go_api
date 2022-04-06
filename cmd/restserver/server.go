@@ -26,6 +26,7 @@ func main() {
 
 	r.HandleFunc("/apiV1/languages", rest.CreateLanguage).Methods("POST")
 	r.HandleFunc("/apiV1/languages/{code}", rest.DeleteLanguage).Methods("DELETE")
+	r.HandleFunc("/apiV1/languages", rest.PutLanguage).Methods("PUT")
 
 	http.ListenAndServe(":8080", r)
 
