@@ -5,6 +5,13 @@ import (
 	"internal/persistence"
 )
 
+var students []entities.Student = []entities.Student{
+	entities.NewStudent(1, "Gaspar", "Missiaen", 21, "23"),
+	entities.NewStudent(2, "Daurian", "Gauron", 20, "Go"),
+	entities.NewStudent(4, "Christopher", "Lessirard", 20, "26"),
+	entities.NewStudent(3, "Daryl", "Caruso", 20, "-2"),
+}
+
 type StudentDaoMemory struct {
 }
 
@@ -15,7 +22,7 @@ func NewStudentDaoMemory() StudentDaoMemory {
 }
 
 func (s StudentDaoMemory) FindAll() []entities.Student {
-
+	return students
 }
 
 func (s StudentDaoMemory) Find(id int) *entities.Student {
