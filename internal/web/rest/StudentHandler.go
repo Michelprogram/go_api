@@ -14,20 +14,13 @@ import (
 	"github.com/gorilla/mux"
 )
 
-var students []entities.Student = []entities.Student{
-	entities.NewStudent(1, "Gaspar", "Missiaen", 21, "23"),
-	entities.NewStudent(2, "Daurian", "Gauron", 20, "Go"),
-	entities.NewStudent(3, "Daryl", "Caruso", 20, "-2"),
-	entities.NewStudent(4, "Christopher", "Lessirard", 20, "26"),
-}
+var dao ps.StudentDao = ps.NewStudentDaoMemory()
 
 func StudentById(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
 	id, _ := strconv.Atoi(vars["id"])
-
-	dao := ps.NewStudentDaoMemory()
 
 	student, err := dao.Find(id)
 
@@ -42,8 +35,6 @@ func StudentById(w http.ResponseWriter, r *http.Request) {
 
 func AllStudents(w http.ResponseWriter, r *http.Request) {
 
-	var dao ps.StudentDaoMemory = ps.NewStudentDaoMemory()
-
 	res, _ := json.Marshal(dao.FindAll())
 
 	fmt.Fprintf(w, "%s", res)
@@ -56,11 +47,15 @@ func CreateStudent(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(reqBody, &student)
 
-	students = append(students, student)
+	if dao.Create(student) {
+		res, _ := json.Marshal(student)
 
-	res, _ := json.Marshal(student)
+		fmt.Fprintf(w, "%s", res)
 
-	fmt.Fprintf(w, "%s", res)
+	}
+
+	fmt.Fprintf(w, "L'étudiant existe déjà")
+
 }
 
 func DeleteStudent(w http.ResponseWriter, r *http.Request) {
@@ -69,19 +64,17 @@ func DeleteStudent(w http.ResponseWriter, r *http.Request) {
 
 	id, _ := strconv.Atoi(vars["id"])
 
-	for index, element := range students {
-		if element.Id == id {
+	student, err := dao.Find(id)
 
-			res, _ := json.Marshal(element)
-
-			students = append(students[:index], students[index+1:]...)
-
-			fmt.Fprintf(w, "%s", res)
-			return
-		}
+	if err != nil {
+		fmt.Fprintf(w, "L'étudiant avec l'id %d, n'éxiste pas.", id)
+		return
 	}
 
-	fmt.Fprintf(w, "L'étudiant avec l'id %d n'éxiste pas.", id)
+	if dao.Delete(id) {
+		res, _ := json.Marshal(student)
+		fmt.Fprintf(w, "%s", res)
+	}
 }
 
 func PutStudent(w http.ResponseWriter, r *http.Request) {
@@ -92,16 +85,12 @@ func PutStudent(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(reqBody, &student)
 
-	for index, element := range students {
-		if element.Id == student.Id {
-			students[index] = student
-
-			fmt.Fprintf(w, "%s", student)
-			return
-		}
+	if dao.Update(student) {
+		res, _ := json.Marshal(student)
+		fmt.Fprintf(w, "%s", res)
+	} else {
+		fmt.Fprintf(w, "L'étudiant avec l'id %d n'éxiste pas.", student.Id)
 	}
-
-	fmt.Fprintf(w, "L'étudiant avec l'id %d n'éxiste pas.", student.Id)
 
 }
 
