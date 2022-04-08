@@ -12,6 +12,16 @@ require internal/persistence v1.0.0
 
 replace internal/persistence => ./internal/persistence
 
-require internal/web/rest v1.0.0
+require (
+	go.mongodb.org/mongo-driver v1.9.0 // indirect
+	internal/web/rest v1.0.0
+)
 
 replace internal/web/rest => ./internal/web/rest
+
+require (
+	github.com/stretchr/testify v1.7.1 // indirect
+	internal/persistence/mongodb v1.0.0
+)
+
+replace internal/persistence/mongodb => ./internal/persistence/mongodb
