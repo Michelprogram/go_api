@@ -18,6 +18,8 @@ var dao ps.StudentDao = ps.NewStudentDaoMemory()
 
 //var daoMongodb ps.StudentDaoMongoDB = ps.NewStudentDaoMongo()
 
+var daoBolt ps.StudentDaoBolt = ps.NewStudentDaoBolt()
+
 func StudentById(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)

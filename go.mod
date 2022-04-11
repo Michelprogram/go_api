@@ -20,8 +20,13 @@ require (
 replace internal/web/rest => ./internal/web/rest
 
 require (
+	github.com/boltdb/bolt v1.3.1 // indirect
 	github.com/stretchr/testify v1.7.1 // indirect
 	internal/persistence/mongodb v1.0.0
 )
 
 replace internal/persistence/mongodb => ./internal/persistence/mongodb
+
+require internal/persistence/bolt v1.0.0
+
+replace internal/persistence/bolt => ./internal/persistence/bolt
