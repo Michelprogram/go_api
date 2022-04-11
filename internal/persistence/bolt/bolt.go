@@ -62,30 +62,33 @@ func (b *MyBolt) insertFakeDataStudents() {
 	}
 
 	for _, student := range students {
+
 		res, _ := json.Marshal(student)
 
-		err := b.db.Update(func(tx *bolt.Tx) error {
+		idStr := fmt.Sprintf("%d", student.Id)
 
-			bucket := tx.Bucket([]byte("Students"))
-
-			if bucket == nil {
-				panic("Bucket : Students ! existe pas")
-			}
-
-			id := fmt.Sprintf("%d", student.Id)
-
-			bucket.Put([]byte(id), res)
-			return nil
-		})
-
-		if err != nil {
-			log.Fatal(err)
-		}
+		b.Put("Students", idStr, string(res))
 	}
 
 }
 
 func (b *MyBolt) Put(bucketName string, key string, value string) {
+
+	err := b.db.Update(func(tx *bolt.Tx) error {
+
+		bucket := tx.Bucket([]byte(bucketName))
+
+		if bucket == nil {
+			panic("Bucket : " + bucketName + "existe pas")
+		}
+
+		bucket.Put([]byte(key), []byte(value))
+		return nil
+	})
+
+	if err != nil {
+		log.Fatal(err)
+	}
 
 }
 
@@ -110,11 +113,32 @@ func (b *MyBolt) Get(bucketName string, key string) string {
 	return value
 }
 
-func (b *MyBolt) GetAll(bucketName string, key string) []string {
-	return []string{"sff"}
+func (b *MyBolt) GetAll(bucketName string) []string {
+
+	var resultat []string
+
+	err := b.db.View(func(tx *bolt.Tx) error {
+		bucket := tx.Bucket([]byte(bucketName))
+
+		c := bucket.Cursor()
+
+		for k, v := c.First(); k != nil; k, v = c.Next() {
+			value := fmt.Sprintf("%s", v)
+			resultat = append(resultat, value)
+			//fmt.Printf("key=%s, value=%s\n", k, v)
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return resultat
 }
 
-func (b *MyBolt) Delete(bucketName string, key string) {
+func (b *MyBolt) Delete(bucketName string, key string) error {
 
 	err := b.db.Update(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(bucketName))
@@ -129,6 +153,8 @@ func (b *MyBolt) Delete(bucketName string, key string) {
 	})
 
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+
+	return nil
 }

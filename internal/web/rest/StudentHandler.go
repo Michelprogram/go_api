@@ -39,9 +39,11 @@ func StudentById(w http.ResponseWriter, r *http.Request) {
 
 func AllStudents(w http.ResponseWriter, r *http.Request) {
 
-	res, _ := json.Marshal(dao.FindAll())
+	//res, _ := json.Marshal(dao.FindAll())
 
 	//daoMongodb.FindAll()
+
+	res, _ := json.Marshal(daoBolt.FindAll())
 
 	fmt.Fprintf(w, "%s", res)
 }
@@ -58,6 +60,7 @@ func CreateStudent(w http.ResponseWriter, r *http.Request) {
 
 		fmt.Fprintf(w, "%s", res)
 
+		return
 	}
 
 	fmt.Fprintf(w, "L'étudiant existe déjà")
@@ -91,7 +94,9 @@ func PutStudent(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(reqBody, &student)
 
-	if dao.Update(student) {
+	//dao.Update(student)
+
+	if daoBolt.Update(student) {
 		res, _ := json.Marshal(student)
 		fmt.Fprintf(w, "%s", res)
 	} else {

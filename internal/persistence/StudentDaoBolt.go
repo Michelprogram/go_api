@@ -11,7 +11,7 @@ import (
 type StudentDaoBolt struct {
 }
 
-//var _ StudentDao = (*StudentDaoBolt)(nil)
+var _ StudentDao = (*StudentDaoBolt)(nil)
 
 var myBolt bolt.MyBolt = bolt.NewMyBolt()
 
@@ -51,35 +51,65 @@ func (d *StudentDaoBolt) Exists(id int) bool {
 
 	return true
 
+	//TODO : Revoir GET PB avec nombre qui commence par même chiffre 2 et insertion 21
+
 }
 
 func (d *StudentDaoBolt) Delete(id int) bool {
 
 	idStr := fmt.Sprintf("%d", id)
 
-	myBolt.Delete("Students", idStr)
+	err := myBolt.Delete("Students", idStr)
+
+	if err != nil {
+		return false
+	}
 
 	return true
 }
 
-/*
-func FindAll() []entities.Student {
+func (d *StudentDaoBolt) FindAll() []entities.Student {
 
-	return nil
+	var students []entities.Student
+
+	for _, student := range myBolt.GetAll("Students") {
+		var st entities.Student
+		json.Unmarshal([]byte(student), &st)
+		students = append(students, st)
+	}
+
+	return students
 }
 
-/*
+func (d *StudentDaoBolt) Create(student entities.Student) bool {
 
+	res, _ := json.Marshal(student)
 
+	idStr := fmt.Sprintf("%d", student.Id)
 
+	if !d.Exists(student.Id) {
+		myBolt.Put("Students", idStr, string(res))
+		return true
+	}
 
-
-
-func Create(student entities.Student) bool {
+	return false
 
 }
 
-func Update(student entities.Student) bool {
+func (d *StudentDaoBolt) Update(student entities.Student) bool {
 
+	if d.Exists(student.Id) {
+
+		res, _ := json.Marshal(student)
+
+		idStr := fmt.Sprintf("%d", student.Id)
+
+		myBolt.Delete("Students", idStr)
+
+		myBolt.Put("Students", idStr, string(res))
+
+		return true
+	}
+
+	return false
 }
-*/
