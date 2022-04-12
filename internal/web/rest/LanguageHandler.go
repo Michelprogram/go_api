@@ -4,35 +4,34 @@ import (
 	"encoding/json"
 	"fmt"
 	"internal/entities"
+	ps "internal/persistence"
 	"io/ioutil"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
-var languages []entities.Language = []entities.Language{
-	entities.NewLanguage("FR", "France"), entities.NewLanguage("DE", "Allemagne"),
-}
+var daoL ps.LanguageDao = ps.NewLanguageDaoMemory()
 
 func LanguageByCode(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
+	code := vars["code"]
 
-	for _, element := range languages {
-		if element.Code == vars["code"] {
-			res, _ := json.Marshal(element)
+	language, err := daoL.Find(code)
 
-			fmt.Fprintf(w, "%s", res)
-			return
-		}
+	if err != nil {
+		fmt.Fprintf(w, "Le code %s n'a pas été trouvé.", code)
+		return
 	}
 
-	fmt.Fprintf(w, "Le code %s n'a pas été trouvé.", vars["code"])
+	res, _ := json.Marshal(language)
+	fmt.Fprintf(w, "%s", res)
 }
 
 func AllLanguages(w http.ResponseWriter, r *http.Request) {
 
-	res, _ := json.Marshal(languages)
+	res, _ := json.Marshal(daoL.FindAll())
 
 	fmt.Fprintf(w, "%s", res)
 }
@@ -44,11 +43,13 @@ func CreateLanguage(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(reqBody, &language)
 
-	languages = append(languages, language)
+	if daoL.Create(language) {
+		res, _ := json.Marshal(language)
 
-	res, _ := json.Marshal(language)
-
-	fmt.Fprintf(w, "%s", res)
+		fmt.Fprintf(w, "%s", res)
+	} else {
+		fmt.Fprintf(w, "Le Language existe déjà")
+	}
 }
 
 func PutLanguage(w http.ResponseWriter, r *http.Request) {
@@ -59,36 +60,28 @@ func PutLanguage(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(reqBody, &language)
 
-	for index, element := range languages {
-		if element.Code == language.Code {
-			languages[index] = language
-
-			fmt.Fprintf(w, "%s", language)
-			return
-		}
+	if daoL.Update(language) {
+		res, _ := json.Marshal(language)
+		fmt.Fprintf(w, "%s", res)
+	} else {
+		fmt.Fprintf(w, "Le code %s n'est pas enregistré.", language.Code)
 	}
-
-	fmt.Fprintf(w, "Le code %s n'est pas enregistré.", language.Code)
-
 }
 
 func DeleteLanguage(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
-	for index, element := range languages {
-		if element.Code == vars["code"] {
+	code := vars["code"]
 
-			res, _ := json.Marshal(element)
-
-			languages = append(languages[:index], languages[index+1:]...)
-
-			fmt.Fprintf(w, "%s", res)
-			return
+	if daoL.Exists(code) {
+		if daoL.Delete(code) {
+			fmt.Fprint(w, "Le code %s a été supprimé.", code)
 		}
+	} else {
+		fmt.Fprintf(w, "Le code %s n'a pas été trouvé.", code)
 	}
 
-	fmt.Fprintf(w, "Le code %s n'a pas été trouvé.", vars["code"])
 }
 
 //lgu.univ@gmail.com

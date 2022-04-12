@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"internal/entities"
 	"internal/persistence/mongodb"
-	"log"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -54,18 +53,20 @@ func (s StudentDaoMongoDB) FindAll() []entities.Student {
 
 func (s StudentDaoMongoDB) Find(id int) (*entities.Student, error) {
 
-	var student bson.M
+	//var student bson.M
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	/*
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 
-	defer cancel()
+		defer cancel()
 
-	err := collection.FindOne(ctx, bson.D{{"id", id}}).Decode(&students)
-	if err != nil {
-		log.Fatal(err)
-	}
+		//err := collection.FindOne(ctx, bson.D{{"id", id}}).Decode(&students)
+		if err != nil {
+			log.Fatal(err)
+		}
+	*/
 
-	return *student, nil
+	return nil, nil
 }
 
 func (s StudentDaoMongoDB) Exists(id int) bool {

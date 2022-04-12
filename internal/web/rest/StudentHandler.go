@@ -18,6 +18,8 @@ var dao ps.StudentDao = ps.NewStudentDaoMemory()
 
 var daoMongodb ps.StudentDaoMongoDB = ps.NewStudentDaoMongo()
 
+var daoBolt ps.StudentDaoBolt = ps.NewStudentDaoBolt()
+
 func StudentById(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -41,6 +43,8 @@ func AllStudents(w http.ResponseWriter, r *http.Request) {
 
 	res, _ := json.Marshal(daoMongodb.FindAll())
 
+	//res, _ := json.Marshal(dao.FindAll())
+
 	fmt.Fprintf(w, "%s", res)
 }
 
@@ -56,6 +60,7 @@ func CreateStudent(w http.ResponseWriter, r *http.Request) {
 
 		fmt.Fprintf(w, "%s", res)
 
+		return
 	}
 
 	fmt.Fprintf(w, "L'étudiant existe déjà")
