@@ -39,11 +39,11 @@ func StudentById(w http.ResponseWriter, r *http.Request) {
 
 func AllStudents(w http.ResponseWriter, r *http.Request) {
 
-	//res, _ := json.Marshal(dao.FindAll())
+	res, _ := json.Marshal(dao.FindAll())
 
 	//daoMongodb.FindAll()
 
-	res, _ := json.Marshal(daoBolt.FindAll())
+	//res, _ := json.Marshal(dao.FindAll())
 
 	fmt.Fprintf(w, "%s", res)
 }
@@ -94,9 +94,7 @@ func PutStudent(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(reqBody, &student)
 
-	//dao.Update(student)
-
-	if daoBolt.Update(student) {
+	if dao.Update(student) {
 		res, _ := json.Marshal(student)
 		fmt.Fprintf(w, "%s", res)
 	} else {

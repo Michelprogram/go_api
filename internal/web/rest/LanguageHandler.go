@@ -4,15 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"internal/entities"
+	ps "internal/persistence"
 	"io/ioutil"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
-var languages []entities.Language = []entities.Language{
-	entities.NewLanguage("FR", "France"), entities.NewLanguage("DE", "Allemagne"),
-}
+var daoL ps.LanguageDao = ps.NewLanguageDaoMemory()
 
 func LanguageByCode(w http.ResponseWriter, r *http.Request) {
 
