@@ -16,7 +16,7 @@ import (
 
 var dao ps.StudentDao = ps.NewStudentDaoMemory()
 
-//var daoMongodb ps.StudentDaoMongoDB = ps.NewStudentDaoMongo()
+var daoMongodb ps.StudentDaoMongoDB = ps.NewStudentDaoMongo()
 
 func StudentById(w http.ResponseWriter, r *http.Request) {
 
@@ -37,9 +37,9 @@ func StudentById(w http.ResponseWriter, r *http.Request) {
 
 func AllStudents(w http.ResponseWriter, r *http.Request) {
 
-	res, _ := json.Marshal(dao.FindAll())
+	//res, _ := json.Marshal(dao.FindAll())
 
-	//daoMongodb.FindAll()
+	res, _ := json.Marshal(daoMongodb.FindAll())
 
 	fmt.Fprintf(w, "%s", res)
 }

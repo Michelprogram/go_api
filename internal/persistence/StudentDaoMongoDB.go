@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"internal/entities"
 	"internal/persistence/mongodb"
+	"log"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -26,12 +27,14 @@ func NewStudentDaoMongo() StudentDaoMongoDB {
 		fmt.Println("Error connexion")
 	}
 
-	collection = database.GetCollection("cryptomonnaie")
+	collection = database.GetCollection("Students")
 
 	return StudentDaoMongoDB{}
 }
 
-func (s StudentDaoMongoDB) FindAll() ([]entities.Student, error) {
+func (s StudentDaoMongoDB) FindAll() []entities.Student {
+
+	var students []entities.Student
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 
@@ -40,23 +43,29 @@ func (s StudentDaoMongoDB) FindAll() ([]entities.Student, error) {
 	cursor, err := collection.Find(ctx, bson.M{})
 
 	if err != nil {
-		return nil, err
+		return nil
 	}
 
-	var crypto []bson.M
-	cursor.All(ctx, &crypto)
+	cursor.All(ctx, &students)
 
-	fmt.Println(crypto)
+	return students
 
-	collection.InsertOne(ctx, bson.D{
-		{Key: "name", Value: "Test Students"},
-	})
-
-	return nil, err
 }
 
 func (s StudentDaoMongoDB) Find(id int) (*entities.Student, error) {
-	return nil, nil
+
+	var student bson.M
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+
+	defer cancel()
+
+	err := collection.FindOne(ctx, bson.D{{"id", id}}).Decode(&students)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return *student, nil
 }
 
 func (s StudentDaoMongoDB) Exists(id int) bool {
@@ -74,3 +83,24 @@ func (s StudentDaoMongoDB) Create(student entities.Student) bool {
 func (s StudentDaoMongoDB) Update(student entities.Student) bool {
 	return false
 }
+
+/* 	collection.InsertOne(ctx, bson.D{
+	{Key: "name", Value: "Test Students"},
+})
+
+	st := entities.Student{
+	Id:             1,
+	LastName:       "Dorian",
+	FirstName:      "Gauron",
+	Age:            21,
+	LanguageDeCode: "FR",
+}
+
+rrr, err := collection.InsertOne(ctx, st)
+
+if err != nil {
+	fmt.Println(err)
+}
+
+fmt.Println(rrr.InsertedID)
+*/

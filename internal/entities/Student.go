@@ -1,20 +1,31 @@
 package entities
 
-import "fmt"
+import (
+	"fmt"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 type Student struct {
-	Id             int
-	FirstName      string
-	LastName       string
-	Age            int
-	LanguageDeCode string
+	ID             primitive.ObjectID `bson:"_id,omitempty"`
+	Id             int                `bson:"id,omitempty"`
+	FirstName      string             `bson:"firstname,omitempty"`
+	LastName       string             `bson:"lastname,omitempty"`
+	Age            int                `bson:"age,omitempty"`
+	LanguageDeCode string             `bson:"languagedecode,omitempty"`
 }
 
 //Check if Student implement de stringer
 var _ fmt.Stringer = (*Student)(nil)
 
 func NewStudent(id int, FirstName string, LastName string, Age int, LanguageDeCode string) Student {
-	return Student{id, FirstName, LastName, Age, LanguageDeCode}
+	return Student{
+		Id:             id,
+		FirstName:      FirstName,
+		LastName:       LastName,
+		Age:            Age,
+		LanguageDeCode: LanguageDeCode,
+	}
 }
 
 func (s Student) String() string {
