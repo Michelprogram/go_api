@@ -10,15 +10,16 @@ import (
 	"strconv"
 
 	ps "internal/persistence"
+	daoM "internal/persistence/daomemory"
 
 	"github.com/gorilla/mux"
 )
 
-var dao ps.StudentDao = ps.NewStudentDaoMemory()
+var daoMemory ps.StudentDao = daoM.NewStudentDaoMemory()
 
-var daoMongodb ps.StudentDaoMongoDB = ps.NewStudentDaoMongo()
+//var daoMongodb ps.StudentDaoMongoDB = ps.NewStudentDaoMongo()
 
-var daoBolt ps.StudentDaoBolt = ps.NewStudentDaoBolt()
+//var daoBolt ps.StudentDaoBolt = daoB.NewStudentDaoBolt()
 
 // swagger:operation GET /students/{id} student studentsId
 // ---
@@ -42,7 +43,7 @@ func StudentById(w http.ResponseWriter, r *http.Request) {
 
 	id, _ := strconv.Atoi(vars["id"])
 
-	student, err := dao.Find(id)
+	student, err := daoMemory.Find(id)
 
 	if err == nil {
 		res, _ := json.Marshal(*student)
@@ -65,9 +66,9 @@ func StudentById(w http.ResponseWriter, r *http.Request) {
 
 func AllStudents(w http.ResponseWriter, r *http.Request) {
 
-	//res, _ := json.Marshal(dao.FindAll())
+	res, _ := json.Marshal(daoMemory.FindAll())
 
-	res, _ := json.Marshal(daoMongodb.FindAll())
+	//res, _ := json.Marshal(daoMongodb.FindAll())
 
 	//res, _ := json.Marshal(dao.FindAll())
 
@@ -96,7 +97,7 @@ func CreateStudent(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(reqBody, &student)
 
-	if dao.Create(student) {
+	if daoMemory.Create(student) {
 		res, _ := json.Marshal(student)
 
 		fmt.Fprintf(w, "%s", res)
@@ -130,14 +131,14 @@ func DeleteStudent(w http.ResponseWriter, r *http.Request) {
 
 	id, _ := strconv.Atoi(vars["id"])
 
-	student, err := dao.Find(id)
+	student, err := daoMemory.Find(id)
 
 	if err != nil {
 		fmt.Fprintf(w, "L'étudiant avec l'id %d, n'éxiste pas.", id)
 		return
 	}
 
-	if dao.Delete(id) {
+	if daoMemory.Delete(id) {
 		res, _ := json.Marshal(student)
 		fmt.Fprintf(w, "%s", res)
 	}
@@ -168,7 +169,7 @@ func PutStudent(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(reqBody, &student)
 
-	if dao.Update(student) {
+	if daoMemory.Update(student) {
 		res, _ := json.Marshal(student)
 		fmt.Fprintf(w, "%s", res)
 	} else {

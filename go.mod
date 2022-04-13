@@ -6,6 +6,14 @@ require github.com/gorilla/mux v1.8.0
 
 require internal/entities v1.0.0
 
+require internal/persistence/daobolt v1.0.0
+
+replace internal/persistence/daobolt => ./internal/persistence/daobolt
+
+require internal/persistence/daomemory v1.0.0
+
+replace internal/persistence/daomemory => ./internal/persistence/daomemory
+
 replace internal/entities => ./internal/entities
 
 require internal/persistence v1.0.0

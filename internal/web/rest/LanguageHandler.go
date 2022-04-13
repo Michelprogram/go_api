@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"internal/entities"
 	ps "internal/persistence"
+	dao "internal/persistence/daomemory"
 	"io/ioutil"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
-var daoL ps.LanguageDao = ps.NewLanguageDaoMemory()
+var daoL ps.LanguageDao = dao.NewLanguageDaoMemory()
 
 //var daoL ps.LanguageDao = ps.NewLanguageDaoBolt()
 

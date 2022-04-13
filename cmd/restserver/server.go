@@ -26,9 +26,13 @@ import (
 	"internal/web/rest"
 
 	"github.com/gorilla/mux"
+
+	"os"
 )
 
 func main() {
+
+	fmt.Println("Args : ", os.Args[1])
 
 	fmt.Println("🚀 Lancement de l'api sur le port 8080...")
 
