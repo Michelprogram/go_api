@@ -27,14 +27,39 @@ func NewMyBolt() MyBolt {
 
 func (b *MyBolt) CreateDatabase() {
 
-	b.createBucket("Students")
-	//b.createBucket(db, "Language")
-	b.insertFakeDataStudents()
+	//var bucketsName []string = []string{"Students", "Languages"}
 
+	/*
+		for _, name := range bucketsName {
+			b.deleteBucket(name)
+			b.createBucket(name)
+		}
+	*/
+
+	b.createBucket("Students")
+
+	b.insertFakeDataStudents()
+	//b.insertFakeDataLanguages()
 }
 
 func (b *MyBolt) Close() {
 	b.db.Close()
+}
+
+func (b *MyBolt) deleteBucket(bucketName string) {
+
+	err := b.db.Update(func(tx *bolt.Tx) error {
+
+		err := tx.DeleteBucket([]byte(bucketName))
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+
+	if err != nil {
+		fmt.Printf("Le bucket %s ne peut être surpprimé car il n'éxiste pas.\n", bucketName)
+	}
 }
 
 func (b *MyBolt) createBucket(bucketName string) {
@@ -68,6 +93,23 @@ func (b *MyBolt) insertFakeDataStudents() {
 		idStr := fmt.Sprintf("%d", student.Id)
 
 		b.Put("Students", idStr, string(res))
+	}
+
+}
+
+func (b *MyBolt) insertFakeDataLanguages() {
+
+	var languages []entities.Language = []entities.Language{
+		entities.NewLanguage(2, "FR", "France"),
+		entities.NewLanguage(1, "DE", "Allemagne"),
+		entities.NewLanguage(3, "CH", "Chine"),
+	}
+
+	for _, language := range languages {
+
+		res, _ := json.Marshal(language)
+
+		b.Put("Languages", language.Code, string(res))
 	}
 
 }

@@ -13,6 +13,8 @@ import (
 
 var daoL ps.LanguageDao = ps.NewLanguageDaoMemory()
 
+//var daoL ps.LanguageDao = ps.NewLanguageDaoBolt()
+
 func LanguageByCode(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -76,7 +78,7 @@ func DeleteLanguage(w http.ResponseWriter, r *http.Request) {
 
 	if daoL.Exists(code) {
 		if daoL.Delete(code) {
-			fmt.Fprint(w, "Le code %s a été supprimé.", code)
+			fmt.Fprintf(w, "Le code %s a été supprimé.", code)
 		}
 	} else {
 		fmt.Fprintf(w, "Le code %s n'a pas été trouvé.", code)
