@@ -1,0 +1,271 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "This api result of students and languages.",
+    "title": "API send students and languages.",
+    "contact": {
+      "name": "Gauron dorian",
+      "email": "gauron.dorian.pro@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "host": "localhost:8080",
+  "basePath": "/apiV1",
+  "paths": {
+    "/languages/": {
+      "get": {
+        "description": "Return all languages.",
+        "tags": [
+          "language"
+        ],
+        "summary": "Return languages.",
+        "operationId": "languageAll",
+        "parameters": [
+          {}
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/languageRes"
+          }
+        }
+      },
+      "put": {
+        "description": "If language update is success, language will be returned with Created (201) else if code doesn't exist return Not Found (404).",
+        "tags": [
+          "language"
+        ],
+        "summary": "Update a new language.",
+        "operationId": "languageUpdate",
+        "parameters": [
+          {
+            "description": "language to update in the list of languages",
+            "name": "language",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/internal/entities/Language"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/okResp"
+          },
+          "404": {
+            "$ref": "#/responses/notFound"
+          }
+        }
+      },
+      "post": {
+        "description": "If language creation is success, language will be returned with Created (201).",
+        "tags": [
+          "language"
+        ],
+        "summary": "Create a new language.",
+        "operationId": "languageCreate",
+        "parameters": [
+          {
+            "description": "language to add to the list of languages",
+            "name": "language",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/internal/entities/Language"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/okResp"
+          },
+          "400": {
+            "$ref": "#/responses/badReq"
+          }
+        }
+      }
+    },
+    "/languages/{code}": {
+      "get": {
+        "description": "If the Language is found, language will be returned else Error Not Found (404) will be returned.",
+        "tags": [
+          "language"
+        ],
+        "summary": "Return an Language provided by the code.",
+        "operationId": "languageCode",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "code of the language",
+            "name": "code",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/languageRes"
+          },
+          "404": {
+            "$ref": "#/responses/notFoundReq"
+          }
+        }
+      },
+      "delete": {
+        "description": "Depending on the language code, HTTP Status Not Found (404) or HTTP Status OK (200) may be returned.",
+        "tags": [
+          "language"
+        ],
+        "summary": "Delete requested language by language code.",
+        "operationId": "deleteLanguage",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "language code",
+            "name": "code",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/okResp"
+          },
+          "404": {
+            "$ref": "#/responses/notFoundReq"
+          }
+        }
+      }
+    },
+    "/students/": {
+      "get": {
+        "description": "Return all students.",
+        "tags": [
+          "student"
+        ],
+        "summary": "Return students.",
+        "operationId": "studentAll",
+        "parameters": [
+          {}
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/studentRes"
+          }
+        }
+      },
+      "put": {
+        "description": "If student update is success, student will be returned with Created (201) else if code doesn't exist return Not Found (404).",
+        "tags": [
+          "student"
+        ],
+        "summary": "Update a new student.",
+        "operationId": "studentUpdate",
+        "parameters": [
+          {
+            "description": "student to update in the list of students",
+            "name": "student",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/internal/entities/Student"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/okResp"
+          },
+          "404": {
+            "$ref": "#/responses/notFound"
+          }
+        }
+      },
+      "post": {
+        "description": "If student creation is success, student will be returned with Created (201).",
+        "tags": [
+          "student"
+        ],
+        "summary": "Create a new student.",
+        "operationId": "studentCreate",
+        "parameters": [
+          {
+            "description": "student to add to the list of students",
+            "name": "student",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/internal/entities/Student"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/okResp"
+          }
+        }
+      }
+    },
+    "/students/{id}": {
+      "get": {
+        "description": "If the Student is found, Student will be returned else Error Not Found (404) will be returned.",
+        "tags": [
+          "student"
+        ],
+        "summary": "Return an Student provided by the id.",
+        "operationId": "studentsId",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "id of the language",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/studentRes"
+          },
+          "404": {
+            "$ref": "#/responses/notFoundReq"
+          }
+        }
+      },
+      "delete": {
+        "description": "Depending on the students id, HTTP Status Not Found (404) or HTTP Status OK (200) may be returned.",
+        "tags": [
+          "student"
+        ],
+        "summary": "Delete requested student by student id.",
+        "operationId": "deleteStudent",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "students id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/okResp"
+          },
+          "404": {
+            "$ref": "#/responses/notFoundReq"
+          }
+        }
+      }
+    }
+  }
+}

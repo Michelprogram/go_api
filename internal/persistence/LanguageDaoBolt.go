@@ -13,7 +13,7 @@ type LanguageDaoBolt struct {
 
 var _ LanguageDao = (*LanguageDaoBolt)(nil)
 
-var boltLanguage bolt.MyBolt = bolt.NewMyBolt()
+var boltLanguage bolt.MyBolt = bolt.GetMyBolt()
 
 func NewLanguageDaoBolt() LanguageDaoBolt {
 

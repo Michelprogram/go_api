@@ -10,36 +10,46 @@ import (
 	"github.com/boltdb/bolt"
 )
 
+var database *bolt.DB
+
 type MyBolt struct {
 	db *bolt.DB
 }
 
-func NewMyBolt() MyBolt {
+func GetMyBolt() MyBolt {
+
+	if database != nil {
+		return MyBolt{db: database}
+	}
+
+	return openMyBolt()
+
+}
+
+func openMyBolt() MyBolt {
 
 	db, err := bolt.Open("myBolt.db", 0600, nil)
+
+	database = db
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return MyBolt{db: db}
+	return MyBolt{db: database}
 }
 
 func (b *MyBolt) CreateDatabase() {
 
-	//var bucketsName []string = []string{"Students", "Languages"}
+	var bucketsName []string = []string{"Students", "Languages"}
 
-	/*
-		for _, name := range bucketsName {
-			b.deleteBucket(name)
-			b.createBucket(name)
-		}
-	*/
-
-	b.createBucket("Students")
+	for _, name := range bucketsName {
+		b.deleteBucket(name)
+		b.createBucket(name)
+	}
 
 	b.insertFakeDataStudents()
-	//b.insertFakeDataLanguages()
+	b.insertFakeDataLanguages()
 }
 
 func (b *MyBolt) Close() {

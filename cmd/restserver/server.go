@@ -1,3 +1,22 @@
+// Package classification API send students and languages.
+//
+// This api result of students and languages.
+//
+// Terms Of Service:
+//
+//     Schemes: http, https
+//     Host: localhost:8080
+//     Version: 1.0.0
+//	   BasePath: /apiV1
+//     Contact: Gauron dorian<gauron.dorian.pro@gmail.com>
+//
+//     Consumes:
+//     - application/json
+//
+//     Produces:
+//     - application/json
+//
+// swagger:meta
 package main
 
 import (

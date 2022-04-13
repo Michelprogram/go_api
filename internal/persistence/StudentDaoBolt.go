@@ -13,7 +13,7 @@ type StudentDaoBolt struct {
 
 var _ StudentDao = (*StudentDaoBolt)(nil)
 
-var myBolt bolt.MyBolt = bolt.NewMyBolt()
+var myBolt bolt.MyBolt = bolt.GetMyBolt()
 
 func NewStudentDaoBolt() StudentDaoBolt {
 
