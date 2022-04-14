@@ -1,33 +1,24 @@
-package persistence
+package daomongo
 
 import (
-	"context"
-	"fmt"
+	"encoding/json"
+	"errors"
 	"internal/entities"
+	"internal/persistence/interfaces"
 	"internal/persistence/mongodb"
-	"time"
-
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
+	"log"
 )
 
 type StudentDaoMongoDB struct {
 }
 
-//var _ StudentDao = (*StudentDaoMongoDB)(nil)
+var _ interfaces.StudentDao = (*StudentDaoMongoDB)(nil)
 
-var database mongodb.Mongo
-var collection *mongo.Collection
+var myMongo mongodb.MyMongo = mongodb.NewMyMongo()
+
+var collection = "Students"
 
 func NewStudentDaoMongo() StudentDaoMongoDB {
-	database, err := mongodb.NewMongo()
-
-	if err != nil {
-		fmt.Println("Error connexion")
-	}
-
-	collection = database.GetCollection("Students")
-
 	return StudentDaoMongoDB{}
 }
 
@@ -35,17 +26,17 @@ func (s StudentDaoMongoDB) FindAll() []entities.Student {
 
 	var students []entities.Student
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	res := myMongo.GetAll(collection)
 
-	defer cancel()
+	students = make([]entities.Student, len(res))
 
-	cursor, err := collection.Find(ctx, bson.M{})
+	for index, student := range res {
+		var st entities.Student
 
-	if err != nil {
-		return nil
+		json.Unmarshal([]byte(student), &st)
+
+		students[index] = st
 	}
-
-	cursor.All(ctx, &students)
 
 	return students
 
@@ -53,32 +44,46 @@ func (s StudentDaoMongoDB) FindAll() []entities.Student {
 
 func (s StudentDaoMongoDB) Find(id int) (*entities.Student, error) {
 
-	//var student bson.M
+	var student entities.Student
 
-	/*
-		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	var res string = myMongo.Get(collection, "id", id)
 
-		defer cancel()
+	if res == "" {
+		return nil, errors.New("L'id n'éxiste pas")
+	}
 
-		//err := collection.FindOne(ctx, bson.D{{"id", id}}).Decode(&students)
-		if err != nil {
-			log.Fatal(err)
-		}
-	*/
+	json.Unmarshal([]byte(res), &student)
 
-	return nil, nil
+	return &student, nil
 }
 
 func (s StudentDaoMongoDB) Exists(id int) bool {
+
+	if myMongo.Get(collection, "id", id) != "" {
+		return true
+	}
+
 	return false
 }
 
 func (s StudentDaoMongoDB) Delete(id int) bool {
-	return false
+	return myMongo.Delete(collection, "id", id)
 }
 
 func (s StudentDaoMongoDB) Create(student entities.Student) bool {
+
+	studentStr, err := json.Marshal(student)
+
+	if !s.Exists(student.Id) {
+		return myMongo.Create(collection, string(studentStr))
+	}
+
+	if err != nil {
+		log.Fatal("Problème lors de la conversion student to json byte")
+	}
+
 	return false
+
 }
 
 func (s StudentDaoMongoDB) Update(student entities.Student) bool {

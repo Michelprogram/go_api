@@ -2,17 +2,14 @@ package entities
 
 import (
 	"fmt"
-
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Student struct {
-	ID             primitive.ObjectID `bson:"_id,omitempty"`
-	Id             int                `bson:"id,omitempty"`
-	FirstName      string             `bson:"firstname,omitempty"`
-	LastName       string             `bson:"lastname,omitempty"`
-	Age            int                `bson:"age,omitempty"`
-	LanguageDeCode string             `bson:"languagedecode,omitempty"`
+	Id             int    //`json:"Id"`
+	FirstName      string //`json:"Field Str"`
+	LastName       string //`json:"Field Str"`
+	Age            int    //`json:"Field Int"`
+	LanguageDeCode string //`json:"Field Str"`
 }
 
 //Check if Student implement de stringer

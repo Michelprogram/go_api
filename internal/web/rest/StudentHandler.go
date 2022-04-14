@@ -15,11 +15,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-var daoMemory interfaces.StudentDao = provider.GetDaoStudent()
-
-//var daoMongodb ps.StudentDaoMongoDB = ps.NewStudentDaoMongo()
-
-//var daoBolt ps.StudentDaoBolt = daoB.NewStudentDaoBolt()
+var daoS interfaces.StudentDao = provider.GetDaoStudent()
 
 // swagger:operation GET /students/{id} student studentsId
 // ---
@@ -43,7 +39,7 @@ func StudentById(w http.ResponseWriter, r *http.Request) {
 
 	id, _ := strconv.Atoi(vars["id"])
 
-	student, err := daoMemory.Find(id)
+	student, err := daoS.Find(id)
 
 	if err == nil {
 		res, _ := json.Marshal(*student)
@@ -66,11 +62,7 @@ func StudentById(w http.ResponseWriter, r *http.Request) {
 
 func AllStudents(w http.ResponseWriter, r *http.Request) {
 
-	res, _ := json.Marshal(daoMemory.FindAll())
-
-	//res, _ := json.Marshal(daoMongodb.FindAll())
-
-	//res, _ := json.Marshal(dao.FindAll())
+	res, _ := json.Marshal(daoS.FindAll())
 
 	fmt.Fprintf(w, "%s", res)
 }
@@ -97,7 +89,7 @@ func CreateStudent(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(reqBody, &student)
 
-	if daoMemory.Create(student) {
+	if daoS.Create(student) {
 		res, _ := json.Marshal(student)
 
 		fmt.Fprintf(w, "%s", res)
@@ -105,7 +97,7 @@ func CreateStudent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "L'étudiant existe déjà")
+	fmt.Fprintf(w, "L'étudiant %d existe déjà", student.Id)
 
 }
 
@@ -131,14 +123,14 @@ func DeleteStudent(w http.ResponseWriter, r *http.Request) {
 
 	id, _ := strconv.Atoi(vars["id"])
 
-	student, err := daoMemory.Find(id)
+	student, err := daoS.Find(id)
 
 	if err != nil {
 		fmt.Fprintf(w, "L'étudiant avec l'id %d, n'éxiste pas.", id)
 		return
 	}
 
-	if daoMemory.Delete(id) {
+	if daoS.Delete(id) {
 		res, _ := json.Marshal(student)
 		fmt.Fprintf(w, "%s", res)
 	}
@@ -169,7 +161,7 @@ func PutStudent(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(reqBody, &student)
 
-	if daoMemory.Update(student) {
+	if daoS.Update(student) {
 		res, _ := json.Marshal(student)
 		fmt.Fprintf(w, "%s", res)
 	} else {

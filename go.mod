@@ -14,6 +14,10 @@ require internal/persistence/daomemory v1.0.0
 
 replace internal/persistence/daomemory => ./internal/persistence/daomemory
 
+require internal/persistence/daomongo v1.0.0
+
+replace internal/persistence/daomongo => ./internal/persistence/daomongo
+
 replace internal/entities => ./internal/entities
 
 require internal/persistence v1.0.0

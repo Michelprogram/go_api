@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"internal/persistence/daobolt"
 	"internal/persistence/daomemory"
+	"internal/persistence/daomongo"
 	"internal/persistence/interfaces"
 	"os"
 	"strings"
@@ -70,7 +71,7 @@ func GetDaoStudent() interfaces.StudentDao {
 	switch dao {
 	case "mongo":
 
-		return nil
+		return daomongo.NewStudentDaoMongo()
 
 	case "bolt":
 		return daobolt.NewStudentDaoBolt()
