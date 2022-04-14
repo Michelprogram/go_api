@@ -36,10 +36,12 @@ func openMyBolt() MyBolt {
 		log.Fatal(err)
 	}
 
+	createDatabase(MyBolt{db: database})
+
 	return MyBolt{db: database}
 }
 
-func (b *MyBolt) CreateDatabase() {
+func createDatabase(b MyBolt) {
 
 	var bucketsName []string = []string{"Students", "Languages"}
 

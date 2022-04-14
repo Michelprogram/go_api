@@ -18,8 +18,6 @@ var boltLanguage bolt.MyBolt = bolt.GetMyBolt()
 
 func NewLanguageDaoBolt() LanguageDaoBolt {
 
-	boltLanguage.CreateDatabase()
-
 	return LanguageDaoBolt{}
 }
 

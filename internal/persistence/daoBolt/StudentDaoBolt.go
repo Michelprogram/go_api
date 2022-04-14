@@ -17,9 +17,6 @@ var _ interfaces.StudentDao = (*StudentDaoBolt)(nil)
 var myBolt bolt.MyBolt = bolt.GetMyBolt()
 
 func NewStudentDaoBolt() StudentDaoBolt {
-
-	myBolt.CreateDatabase()
-
 	return StudentDaoBolt{}
 }
 
