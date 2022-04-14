@@ -5,14 +5,14 @@ import (
 	"errors"
 	"internal/entities"
 
-	ps "internal/persistence"
 	"internal/persistence/bolt"
+	"internal/persistence/interfaces"
 )
 
 type LanguageDaoBolt struct {
 }
 
-var _ ps.LanguageDao = (*LanguageDaoBolt)(nil)
+var _ interfaces.LanguageDao = (*LanguageDaoBolt)(nil)
 
 var boltLanguage bolt.MyBolt = bolt.GetMyBolt()
 

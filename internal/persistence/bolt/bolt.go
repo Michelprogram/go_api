@@ -90,10 +90,10 @@ func (b *MyBolt) createBucket(bucketName string) {
 func (b *MyBolt) insertFakeDataStudents() {
 
 	var students []entities.Student = []entities.Student{
-		entities.NewStudent(1, "Gaspar", "Missiaen", 21, "23"),
-		entities.NewStudent(2, "Daurian", "Gauron", 20, "Go"),
-		entities.NewStudent(4, "Christopher", "Lessirard", 20, "26"),
-		entities.NewStudent(3, "Daryl", "Caruso", 20, "-2"),
+		entities.NewStudent(1, "Gaspar bolt", "Missiaen", 21, "FR"),
+		entities.NewStudent(2, "Daurian bolt", "Gauron", 20, "DA"),
+		entities.NewStudent(4, "Christopher bolt", "Lessirard", 20, "CH"),
+		entities.NewStudent(3, "Daryl bolt", "Caruso", 20, "DE"),
 	}
 
 	for _, student := range students {
@@ -110,9 +110,9 @@ func (b *MyBolt) insertFakeDataStudents() {
 func (b *MyBolt) insertFakeDataLanguages() {
 
 	var languages []entities.Language = []entities.Language{
-		entities.NewLanguage(2, "FR", "France"),
-		entities.NewLanguage(1, "DE", "Allemagne"),
-		entities.NewLanguage(3, "CH", "Chine"),
+		entities.NewLanguage(2, "FR", "France bolt"),
+		entities.NewLanguage(1, "DE", "Allemagne bolt"),
+		entities.NewLanguage(3, "CH", "Chine bolt"),
 	}
 
 	for _, language := range languages {

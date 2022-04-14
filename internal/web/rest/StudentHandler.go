@@ -9,13 +9,13 @@ import (
 
 	"strconv"
 
-	ps "internal/persistence"
-	daoM "internal/persistence/daomemory"
+	provider "internal/persistence"
+	"internal/persistence/interfaces"
 
 	"github.com/gorilla/mux"
 )
 
-var daoMemory ps.StudentDao = daoM.NewStudentDaoMemory()
+var daoMemory interfaces.StudentDao = provider.GetDaoStudent()
 
 //var daoMongodb ps.StudentDaoMongoDB = ps.NewStudentDaoMongo()
 

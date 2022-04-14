@@ -3,19 +3,19 @@ package daomemory
 import (
 	"errors"
 	"internal/entities"
-	ps "internal/persistence"
+	"internal/persistence/interfaces"
 )
 
 var languages []entities.Language = []entities.Language{
-	entities.NewLanguage(2, "FR", "France"),
-	entities.NewLanguage(1, "DE", "Allemagne"),
-	entities.NewLanguage(3, "CH", "Chine"),
+	entities.NewLanguage(2, "FR", "France memory"),
+	entities.NewLanguage(1, "DE", "Allemagne memory"),
+	entities.NewLanguage(3, "CH", "Chine memory"),
 }
 
 type LanguageDaoMemory struct {
 }
 
-var _ ps.LanguageDao = (*LanguageDaoMemory)(nil)
+var _ interfaces.LanguageDao = (*LanguageDaoMemory)(nil)
 
 func NewLanguageDaoMemory() LanguageDaoMemory {
 	return LanguageDaoMemory{}

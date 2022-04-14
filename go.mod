@@ -20,6 +20,10 @@ require internal/persistence v1.0.0
 
 replace internal/persistence => ./internal/persistence
 
+require internal/persistence/interfaces v1.0.0
+
+replace internal/persistence/interfaces => ./internal/persistence/interfaces
+
 require (
 	go.mongodb.org/mongo-driver v1.9.0 // indirect
 	internal/web/rest v1.0.0

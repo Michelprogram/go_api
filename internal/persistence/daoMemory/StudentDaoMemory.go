@@ -3,20 +3,20 @@ package daomemory
 import (
 	"errors"
 	"internal/entities"
-	ps "internal/persistence"
+	"internal/persistence/interfaces"
 )
 
 var students []entities.Student = []entities.Student{
-	entities.NewStudent(1, "Gaspar", "Missiaen", 21, "23"),
-	entities.NewStudent(2, "Daurian", "Gauron", 20, "Go"),
-	entities.NewStudent(4, "Christopher", "Lessirard", 20, "26"),
-	entities.NewStudent(3, "Daryl", "Caruso", 20, "-2"),
+	entities.NewStudent(1, "Gaspar memory", "Missiaen", 21, "FR"),
+	entities.NewStudent(2, "Daurian memory", "Gauron", 20, "DE"),
+	entities.NewStudent(4, "Christopher memory", "Lessirard", 20, "CH"),
+	entities.NewStudent(3, "Daryl memory", "Caruso", 20, "DA"),
 }
 
 type StudentDaoMemory struct {
 }
 
-var _ ps.StudentDao = (*StudentDaoMemory)(nil)
+var _ interfaces.StudentDao = (*StudentDaoMemory)(nil)
 
 func NewStudentDaoMemory() StudentDaoMemory {
 	return StudentDaoMemory{}

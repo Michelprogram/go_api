@@ -5,14 +5,14 @@ import (
 	"errors"
 	"fmt"
 	"internal/entities"
-	ps "internal/persistence"
 	"internal/persistence/bolt"
+	"internal/persistence/interfaces"
 )
 
 type StudentDaoBolt struct {
 }
 
-var _ ps.StudentDao = (*StudentDaoBolt)(nil)
+var _ interfaces.StudentDao = (*StudentDaoBolt)(nil)
 
 var myBolt bolt.MyBolt = bolt.GetMyBolt()
 
@@ -23,7 +23,7 @@ func NewStudentDaoBolt() StudentDaoBolt {
 	return StudentDaoBolt{}
 }
 
-func (d *StudentDaoBolt) Find(id int) (*entities.Student, error) {
+func (d StudentDaoBolt) Find(id int) (*entities.Student, error) {
 
 	var student entities.Student
 
@@ -40,7 +40,7 @@ func (d *StudentDaoBolt) Find(id int) (*entities.Student, error) {
 	return &student, nil
 }
 
-func (d *StudentDaoBolt) Exists(id int) bool {
+func (d StudentDaoBolt) Exists(id int) bool {
 
 	idStr := fmt.Sprintf("%d", id)
 
@@ -56,7 +56,7 @@ func (d *StudentDaoBolt) Exists(id int) bool {
 
 }
 
-func (d *StudentDaoBolt) Delete(id int) bool {
+func (d StudentDaoBolt) Delete(id int) bool {
 
 	idStr := fmt.Sprintf("%d", id)
 
@@ -69,7 +69,7 @@ func (d *StudentDaoBolt) Delete(id int) bool {
 	return true
 }
 
-func (d *StudentDaoBolt) FindAll() []entities.Student {
+func (d StudentDaoBolt) FindAll() []entities.Student {
 
 	var students []entities.Student
 
@@ -82,7 +82,7 @@ func (d *StudentDaoBolt) FindAll() []entities.Student {
 	return students
 }
 
-func (d *StudentDaoBolt) Create(student entities.Student) bool {
+func (d StudentDaoBolt) Create(student entities.Student) bool {
 
 	res, _ := json.Marshal(student)
 
@@ -97,7 +97,7 @@ func (d *StudentDaoBolt) Create(student entities.Student) bool {
 
 }
 
-func (d *StudentDaoBolt) Update(student entities.Student) bool {
+func (d StudentDaoBolt) Update(student entities.Student) bool {
 
 	if d.Exists(student.Id) {
 

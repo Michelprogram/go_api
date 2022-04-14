@@ -27,12 +27,14 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"os"
+	provider "internal/persistence"
 )
 
 func main() {
 
-	fmt.Println("Args : ", os.Args[1])
+	if !provider.ValidityOfArgs() {
+		return
+	}
 
 	fmt.Println("🚀 Lancement de l'api sur le port 8080...")
 

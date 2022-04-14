@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"internal/entities"
-	ps "internal/persistence"
-	dao "internal/persistence/daomemory"
+	provider "internal/persistence"
+	"internal/persistence/interfaces"
 	"io/ioutil"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
-var daoL ps.LanguageDao = dao.NewLanguageDaoMemory()
+var daoL interfaces.LanguageDao = provider.GetDaoLanguage()
 
 //var daoL ps.LanguageDao = ps.NewLanguageDaoBolt()
 
