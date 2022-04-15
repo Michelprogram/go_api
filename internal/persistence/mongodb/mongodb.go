@@ -26,7 +26,68 @@ func NewMyMongo() MyMongo {
 		return MyMongo{client: client}
 	}
 
-	return openConnection()
+	myMongo := openConnection()
+
+	myMongo.insertFakeDataStudents()
+	myMongo.insertFakeDataLanguages()
+
+	return myMongo
+
+}
+
+func (m *MyMongo) insertFakeDataLanguages() {
+
+	var collection string = "Languages"
+
+	m.dropCollection(collection)
+
+	var languages []entities.Language = []entities.Language{
+		entities.NewLanguage(2, "FR", "France mongo"),
+		entities.NewLanguage(1, "DE", "Allemagne mongo"),
+		entities.NewLanguage(3, "CH", "Chine mongo"),
+	}
+
+	for _, language := range languages {
+
+		res, _ := json.Marshal(language)
+
+		m.Create(collection, string(res))
+	}
+
+}
+
+func (m *MyMongo) insertFakeDataStudents() {
+
+	var collection string = "Students"
+
+	m.dropCollection(collection)
+
+	var students []entities.Student = []entities.Student{
+		entities.NewStudent(1, "Gaspar mongo", "Missiaen", 21, "FR"),
+		entities.NewStudent(2, "Daurian mongo", "Gauron", 20, "DA"),
+		entities.NewStudent(4, "Christopher mongo", "Lessirard", 20, "CH"),
+		entities.NewStudent(3, "Daryl mongo", "Caruso", 20, "DE"),
+	}
+
+	for _, student := range students {
+
+		res, _ := json.Marshal(student)
+
+		m.Create(collection, string(res))
+
+	}
+
+}
+
+func (m *MyMongo) dropCollection(collection string) {
+
+	var coll *mongo.Collection = m.client.Database("Go_api").Collection(collection)
+
+	err := coll.Drop(context.TODO())
+
+	if err != nil {
+		log.Fatal("Impossible de clean la collection students : ", err)
+	}
 
 }
 
@@ -138,24 +199,34 @@ func (m *MyMongo) Create(collection string, data string) bool {
 
 	var coll *mongo.Collection = m.client.Database("Go_api").Collection(collection)
 
-	fmt.Println("Test : ", student)
-
 	json.Unmarshal([]byte(data), &student)
 
-	fmt.Println("Test : ", student)
-
-	cursor, err := coll.InsertOne(context.TODO(), student)
+	_, err := coll.InsertOne(context.TODO(), student)
 
 	if err != nil {
 		log.Fatal("Problème lors de l'insertion")
 		return false
 	}
 
-	fmt.Println("Insertion de  : ", cursor)
-
 	return true
 }
 
-func (m *MyMongo) Update(collection string, data string) {
+func (m *MyMongo) Update(collection string, data string) bool {
 
+	var student entities.Student
+
+	var coll *mongo.Collection = m.client.Database("Go_api").Collection(collection)
+
+	json.Unmarshal([]byte(data), &student)
+
+	_, err := coll.UpdateOne(context.TODO(), bson.D{{"id", student.Id}}, bson.D{{
+		"$set", student,
+	}})
+
+	if err != nil {
+		log.Fatal("Problème lors de l'insertion")
+		return false
+	}
+
+	return true
 }

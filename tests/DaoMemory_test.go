@@ -2,13 +2,13 @@ package tests
 
 import (
 	"internal/entities"
-	"internal/persistence"
+	memomry "internal/persistence/daomemory"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-var dao persistence.StudentDaoMemory = persistence.NewStudentDaoMemory()
+var dao memomry.StudentDaoMemory = memomry.NewStudentDaoMemory()
 
 func TestFindAll(t *testing.T) {
 
@@ -23,7 +23,7 @@ func TestFindAll(t *testing.T) {
 
 func TestFindId1(t *testing.T) {
 
-	var expected entities.Student = entities.NewStudent(1, "Gaspar", "Missiaen", 21, "23")
+	var expected entities.Student = entities.NewStudent(1, "Gaspar memory", "Missiaen", 21, "FR")
 	student, _ := dao.Find(1)
 
 	assert.Equal(t, expected, *student, "Return student with id 1")
@@ -55,7 +55,7 @@ func TestDeleteId1(t *testing.T) {
 
 func TestAddStudent(t *testing.T) {
 
-	var student entities.Student = entities.NewStudent(21, "Gauron", "Dorian", 21, "FR")
+	var student entities.Student = entities.NewStudent(21, "Gauron memory", "Dorian", 21, "FR")
 
 	size := len(dao.FindAll())
 

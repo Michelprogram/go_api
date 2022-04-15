@@ -74,12 +74,13 @@ func (s StudentDaoMongoDB) Create(student entities.Student) bool {
 
 	studentStr, err := json.Marshal(student)
 
-	if !s.Exists(student.Id) {
-		return myMongo.Create(collection, string(studentStr))
-	}
-
 	if err != nil {
 		log.Fatal("Problème lors de la conversion student to json byte")
+		return false
+	}
+
+	if !s.Exists(student.Id) {
+		return myMongo.Create(collection, string(studentStr))
 	}
 
 	return false
@@ -87,26 +88,17 @@ func (s StudentDaoMongoDB) Create(student entities.Student) bool {
 }
 
 func (s StudentDaoMongoDB) Update(student entities.Student) bool {
+
+	studentStr, err := json.Marshal(student)
+
+	if err != nil {
+		log.Fatal("Problème lors de la conversion student to json byte")
+		return false
+	}
+
+	if s.Exists(student.Id){
+		return myMongo.Update(collection, string(studentStr))
+	}
+
 	return false
 }
-
-/* 	collection.InsertOne(ctx, bson.D{
-	{Key: "name", Value: "Test Students"},
-})
-
-	st := entities.Student{
-	Id:             1,
-	LastName:       "Dorian",
-	FirstName:      "Gauron",
-	Age:            21,
-	LanguageDeCode: "FR",
-}
-
-rrr, err := collection.InsertOne(ctx, st)
-
-if err != nil {
-	fmt.Println(err)
-}
-
-fmt.Println(rrr.InsertedID)
-*/
