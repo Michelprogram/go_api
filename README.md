@@ -137,9 +137,9 @@ Project Link: [https://github.com/Michelprogram/blind-test.git](https://github.c
 
 This space is a list to resources i found helpful and would like to give credit to.
 
-* [Tailwind ](https://tailwindcss.com/)
-* [Axios](https://axios-http.com/fr/docs/intro)
-* [Redis for go](https://redis.uptrace.dev/)
+* [![Go Badge](https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white)](https://go.dev/)
+* [Gorilla](https://github.com/gorilla/mux)
+* [Bolt](https://github.com/boltdb/bolt)
 
 <p align="right"><a href="#top">⬆️</a></p>
 
